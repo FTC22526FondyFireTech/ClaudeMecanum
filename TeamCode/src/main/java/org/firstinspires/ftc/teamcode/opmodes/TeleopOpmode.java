@@ -29,8 +29,8 @@ public class TeleopOpmode extends CommandOpMode {
         drive.setDefaultCommand(new DriveCommand(drive,
                 () -> driverGamepad.getLeftY(),
                 () -> driverGamepad.getLeftX(),
-                () -> driverGamepad.getRightX(),
-                () -> true));
+                () -> driverGamepad.getRightX()));
+
 
         telemetryM = PanelsTelemetry.INSTANCE.getTelemetry();
 
@@ -48,13 +48,9 @@ public class TeleopOpmode extends CommandOpMode {
 
         while (!isStopRequested() && opModeIsActive()) {
             run();
-            if (driverGamepad.getGamepadButton(GamepadKeys.Button.LEFT_BUMPER).get()) {
-                new DriveCommand(drive,
-                        () -> driverGamepad.getLeftY(),
-                        () -> driverGamepad.getLeftX(),
-                        () -> driverGamepad.getRightX(),
-                        () -> false);
-            }
+
+            drive.setRobotCentric(driverGamepad.getGamepadButton(GamepadKeys.Button.LEFT_BUMPER).get()) ;
+
             telemetryM.update(telemetry);
         }
         reset();
