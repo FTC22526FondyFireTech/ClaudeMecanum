@@ -6,7 +6,9 @@ import com.pedropathing.follower.Follower;
 import com.pedropathing.follower.FollowerConstants;
 import com.pedropathing.ftc.FollowerBuilder;
 import com.pedropathing.ftc.drivetrains.MecanumConstants;
+import com.pedropathing.ftc.localization.Encoder;
 import com.pedropathing.ftc.localization.constants.PinpointConstants;
+import com.pedropathing.ftc.localization.constants.ThreeWheelConstants;
 import com.pedropathing.paths.PathConstraints;
 import com.qualcomm.hardware.gobilda.GoBildaPinpointDriver;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
@@ -76,7 +78,7 @@ public class Constants {
     // goBILDA Pinpoint odometry computer configuration.
     // forwardPodY / strafePodX are the offsets (in inches) of the odometry pods from the
     // robot's center of rotation. See https://pedropathing.com/docs/pathing/tuning/localization/pinpoint
-    public static PinpointConstants localizerConstants = new PinpointConstants()
+    public static PinpointConstants localizerConstantsPinpoint = new PinpointConstants()
             .hardwareMapName(PINPOINT_NAME)
             .forwardPodY(0.75) // TODO: measure on your robot
             .strafePodX(-6.6) // TODO: measure on your robot
@@ -84,6 +86,21 @@ public class Constants {
             .encoderResolution(GoBildaPinpointDriver.GoBildaOdometryPods.goBILDA_4_BAR_POD)
             .forwardEncoderDirection(GoBildaPinpointDriver.EncoderDirection.FORWARD)
             .strafeEncoderDirection(GoBildaPinpointDriver.EncoderDirection.REVERSED);
+
+
+    public static ThreeWheelConstants localizer3ConstantsThreeWheel = new ThreeWheelConstants()
+            .forwardTicksToInches(.001989436789)
+            .strafeTicksToInches(.001989436789)
+            .turnTicksToInches(.001989436789)
+            .leftPodY(1)
+            .rightPodY(-1)
+            .strafePodX(-2.5)
+            .leftEncoder_HardwareMapName("leftFront")
+            .rightEncoder_HardwareMapName("rightRear")
+            .strafeEncoder_HardwareMapName("rightFront")
+            .leftEncoderDirection(Encoder.FORWARD)
+            .rightEncoderDirection(Encoder.FORWARD)
+            .strafeEncoderDirection(Encoder.FORWARD);
 
     /*
      * PathConstraints, in order: tValueConstraint, velocityConstraint, translationalConstraint,
@@ -97,7 +114,8 @@ public class Constants {
     public static Follower createFollower(HardwareMap hardwareMap) {
         return new FollowerBuilder(followerConstants, hardwareMap)
                 .mecanumDrivetrain(driveConstants)
-                .pinpointLocalizer(localizerConstants)
+                .threeWheelLocalizer(localizer3ConstantsThreeWheel)
+              //  .pinpointLocalizer(localizerConstantsPinpoint)
                 .pathConstraints(pathConstraints)
                 .build();
     }
