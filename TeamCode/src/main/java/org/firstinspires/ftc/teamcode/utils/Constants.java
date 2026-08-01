@@ -88,7 +88,7 @@ public class Constants {
             .strafeEncoderDirection(GoBildaPinpointDriver.EncoderDirection.REVERSED);
 
 
-    public static ThreeWheelConstants localizer3ConstantsThreeWheel = new ThreeWheelConstants()
+    public static ThreeWheelConstants localizerConstantsThreeWheel = new ThreeWheelConstants()
             .forwardTicksToInches(.001989436789)
             .strafeTicksToInches(.001989436789)
             .turnTicksToInches(.001989436789)
@@ -114,7 +114,7 @@ public class Constants {
     public static Follower createFollower(HardwareMap hardwareMap) {
         return new FollowerBuilder(followerConstants, hardwareMap)
                 .mecanumDrivetrain(driveConstants)
-                .threeWheelLocalizer(localizer3ConstantsThreeWheel)
+                .threeWheelLocalizer(localizerConstantsThreeWheel)
               //  .pinpointLocalizer(localizerConstantsPinpoint)
                 .pathConstraints(pathConstraints)
                 .build();
