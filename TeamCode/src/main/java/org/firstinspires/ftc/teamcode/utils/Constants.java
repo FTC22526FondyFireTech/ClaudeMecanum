@@ -7,22 +7,26 @@ import com.pedropathing.follower.FollowerConstants;
 import com.pedropathing.ftc.FollowerBuilder;
 import com.pedropathing.ftc.drivetrains.MecanumConstants;
 import com.pedropathing.ftc.localization.Encoder;
+import com.pedropathing.ftc.localization.constants.DriveEncoderConstants;
 import com.pedropathing.ftc.localization.constants.PinpointConstants;
 import com.pedropathing.ftc.localization.constants.ThreeWheelConstants;
+import com.pedropathing.ftc.localization.constants.ThreeWheelIMUConstants;
 import com.pedropathing.paths.PathConstraints;
 import com.qualcomm.hardware.gobilda.GoBildaPinpointDriver;
+import com.qualcomm.hardware.rev.RevHubOrientationOnRobot;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.HardwareMap;
+
 import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 
 /**
  * Central tuning/config file for the mecanum drivebase.
- *
+ * <p>
  * This wires the goBILDA Pinpoint odometry computer and four drive motors into a
  * Pedro Pathing {@link Follower}. The Follower does all of the localization math and
  * PID-based path following; {@code MecanumDriveSubsystem} just wraps it in a
  * SolversLib {@code SubsystemBase} so it plays nicely with the command-based framework.
- *
+ * <p>
  * TODO: Every numeric value below is a placeholder. Follow the Pedro Pathing tuning
  * guide (<a href="https://pedropathing.com/docs/pathing/tuning">...</a>) to tune forwardZeroPowerAcceleration,
  * lateralZeroPowerAcceleration, xVelocity/yVelocity, and the PIDF coefficients for your robot.
@@ -102,6 +106,33 @@ public class Constants {
             .rightEncoderDirection(Encoder.FORWARD)
             .strafeEncoderDirection(Encoder.FORWARD);
 
+    public static ThreeWheelIMUConstants threeWheelIMUConstants = new ThreeWheelIMUConstants()
+            .forwardTicksToInches(.001989436789)
+            .strafeTicksToInches(.001989436789)
+            .turnTicksToInches(.001989436789)
+            .leftPodY(1)
+            .rightPodY(-1)
+            .strafePodX(-2.5)
+            .leftEncoder_HardwareMapName("leftFront")
+            .rightEncoder_HardwareMapName("rightRear")
+            .strafeEncoder_HardwareMapName("rightFront")
+            .leftEncoderDirection(Encoder.FORWARD)
+            .rightEncoderDirection(Encoder.FORWARD)
+            .strafeEncoderDirection(Encoder.FORWARD)
+            .IMU_HardwareMapName("imu")
+            .IMU_Orientation(new RevHubOrientationOnRobot(RevHubOrientationOnRobot.LogoFacingDirection.UP, RevHubOrientationOnRobot.UsbFacingDirection.LEFT));
+
+
+    public static DriveEncoderConstants driveEncoderConstants = new DriveEncoderConstants()
+            .leftFrontMotorName(FRONT_LEFT_MOTOR_NAME)
+            .leftRearMotorName(BACK_LEFT_MOTOR_NAME)
+            .rightFrontMotorName(FRONT_RIGHT_MOTOR_NAME)
+            .rightRearMotorName(BACK_RIGHT_MOTOR_NAME)
+            .leftFrontEncoderDirection(Encoder.FORWARD)
+            .leftRearEncoderDirection(Encoder.FORWARD)
+            .rightFrontEncoderDirection(Encoder.FORWARD)
+            .rightRearEncoderDirection(Encoder.FORWARD);
+
     /*
      * PathConstraints, in order: tValueConstraint, velocityConstraint, translationalConstraint,
      * headingConstraint, timeoutConstraint, brakingStrength, BEZIER_CURVE_SEARCH_LIMIT, brakingStart.
@@ -114,8 +145,10 @@ public class Constants {
     public static Follower createFollower(HardwareMap hardwareMap) {
         return new FollowerBuilder(followerConstants, hardwareMap)
                 .mecanumDrivetrain(driveConstants)
+                //.driveEncoderLocalizer(driveEncoderConstants)
                 .threeWheelLocalizer(localizerConstantsThreeWheel)
-              //  .pinpointLocalizer(localizerConstantsPinpoint)
+                //.threeWheelIMULocalizer(threeWheelIMUConstants)
+                //  .pinpointLocalizer(localizerConstantsPinpoint)
                 .pathConstraints(pathConstraints)
                 .build();
     }
